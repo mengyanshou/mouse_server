@@ -1,14 +1,12 @@
-use enigo::{Key, KeyboardControllable};
 use std::sync::mpsc::channel;
 
 mod common;
-use common::BrowserEvent;
 
 
 fn browser_events() {
-    let (tx, rs) = channel::<BrowserEvent>();
+    // let (tx, rs) = channel::<BrowserEvent>();
     println!("Created channel");
-    std::thread::spawn(move || common::launch_ws_server(tx));
+    std::thread::spawn(move || common::launch_ws_server());
     println!("WebSocket server thread was spawned");
     println!("Lori 1");
     println!("Lori 2");
