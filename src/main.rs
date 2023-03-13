@@ -4,7 +4,7 @@ use std::sync::mpsc::channel;
 mod common;
 use common::BrowserEvent;
 
-#[test]
+
 fn browser_events() {
     let (tx, rs) = channel::<BrowserEvent>();
     println!("Created channel");
@@ -33,16 +33,7 @@ fn browser_events() {
     std::thread::sleep(std::time::Duration::from_millis(10000000000)); // Wait a few seconds to make sure the browser was started
 }
 
-/*
-#[test]
-#[ignore]
-fn run_ws_server() {
-    let (tx, _rs) = channel::<BrowserEvent>();
-    println!("Created channel");
-    std::thread::spawn(move || common::launch_ws_server(tx));
-    std::thread::sleep(std::time::Duration::from_millis(100000)); // Sleep in order to continue running the WebSocket server in another thread
+fn main() {
+    println!("Hello, world!");
+    browser_events()
 }
-// */
-
-
-// cargo run --package enigo -- browser_events
