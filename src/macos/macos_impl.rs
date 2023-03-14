@@ -318,7 +318,7 @@ impl MouseControllable for Enigo {
     fn mouse_scroll_y(&mut self, length: i32) {
         let event = CGEvent::new_scroll_event(
             self.event_source.clone(),
-            ScrollEventUnit::LINE,
+            ScrollEventUnit::PIXEL,
             1,
             -length,
             0,

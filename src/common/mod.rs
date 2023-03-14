@@ -25,7 +25,21 @@ fn handle_raw_connection(mut stream: TcpStream) {
                 let x = buf[1] as i8;
                 let y = buf[2] as i8;
                 println!("x:{},y:{}",x,y);
-                Enigo::new().mouse_move_relative(x as i32, y as i32);
+                let (size_x, size_y) = Enigo::new().main_display_size();
+                let (current_x, current_y) = Enigo::new().mouse_location();
+                let mut new_x = current_x + x as i32;
+                let mut new_y = current_y + y as i32;
+                if new_y > size_y -1{
+                    new_y = size_y -1;
+                }
+                if new_x > size_x -1 {
+                    new_x = size_x -1;
+                }
+                if new_y < 0{
+                    new_y = 0
+                }
+                println!("current_x:{},current_y:{}",current_x,current_y);
+                Enigo::new().mouse_move_to(new_x, new_y);
             }
             2=>{
                 Enigo::new().mouse_click(MouseButton::Left);
@@ -51,13 +65,24 @@ fn handle_raw_connection(mut stream: TcpStream) {
 pub fn launch_ws_server() {
     let listener = TcpListener::bind("0.0.0.0:26541").unwrap();
     println!("TcpListener was created");
-    match listener.accept() {
-        Ok((stream, addr)) => {
-            println!("New connection was made from {addr:?}");
-            std::thread::spawn(move || handle_raw_connection(stream));
-        }
-        Err(e) => {
-            println!("Connection failed: {e:?}");
+    loop {
+        match listener.accept() {
+            Ok((stream, addr)) => {
+                println!("New connection was made from {addr:?}");
+                std::thread::spawn(move || handle_raw_connection(stream));
+            }
+            Err(e) => {
+                println!("Connection failed: {e:?}");
+            }
         }
     }
+    // match listener.accept() {
+    //     Ok((stream, addr)) => {
+    //         println!("New connection was made from {addr:?}");
+    //         std::thread::spawn(move || handle_raw_connection(stream));
+    //     }
+    //     Err(e) => {
+    //         println!("Connection failed: {e:?}");
+    //     }
+    // }
 }
